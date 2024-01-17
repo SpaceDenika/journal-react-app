@@ -1,0 +1,19 @@
+.button {
+  padding: 8px 30px;
+  border-radius: 6px;
+  background: #312EB5;
+  border: none;
+  font-size: 16px;
+  line-height: 26px;
+  transition: background .3s;
+  cursor: pointer;
+}
+
+.button:hover {
+  background: #1a17b4;
+}
+
+.button:disabled:hover {
+  background: #312EB5;
+  cursor: default;
+}
