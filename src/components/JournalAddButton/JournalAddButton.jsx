@@ -1,9 +1,9 @@
 import './JournalAddButton.css';
 import CardButton from '../CardButton/CardButton';
 
-function JournalAddButton() {
+function JournalAddButton({ onClick }) {
 	return (
-		<CardButton className="journal-add">
+		<CardButton onClick={onClick} className="journal-add">
       Добавить воспоминание
 		</CardButton>
 	);

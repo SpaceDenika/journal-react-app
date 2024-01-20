@@ -17,7 +17,7 @@ function JournalList({ setSelectedPost, posts }) {
 
 	return (
 		<ul className="journal-list">
-			{posts.length === 0 && <p>Записи отсутствуют, добавьте первую</p>}
+			{(posts.length === 0 || posts.every(post => post.userId !== userId)) && <p>Записи отсутствуют, добавьте первую</p>}
 			{posts.length > 0 && posts.filter(post => post.userId === userId).sort(sortPosts).map(el => (
 				<li key={el.id} onClick={() => setSelectedPost(el)}>
 					<CardButton>

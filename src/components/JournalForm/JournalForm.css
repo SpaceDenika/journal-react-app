@@ -4,6 +4,29 @@
   gap: 30px;
 }
 
+.journal-form__input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.journal-form__button {
+  width: 20px;
+  height: 20px;
+  background-image: url('../../assets/basket.svg');
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+  transition: opacity .3s ease;
+}
+
+.journal-form__button:hover {
+  opacity: .3;
+}
+
 .journal-form__input {
   flex-grow: 1;
   background-color: inherit;
@@ -35,4 +58,10 @@
 .journal-form__span {
   max-width: 100px;
   width: 100%;
+}
+
+@media screen and (max-width: 768px) {
+  .journal-form__input_title {
+    font-size: 16px;
+  }
 }

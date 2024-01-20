@@ -22,7 +22,7 @@ function mapPosts(posts) {
 
 function App() {
 	const [posts, savePosts] = useLocalStorage('data');
-	const [selectedPost, setSelectedPost] = useState({});
+	const [selectedPost, setSelectedPost] = useState(null);
 
 	const formSubmitHandler = (formData) => {
 		if (!formData.id) {
@@ -41,7 +41,11 @@ function App() {
 				return post;
 			})]);
 		}
+	};
 
+	const postDeleteHandler = (id) => {
+		savePosts([...posts.filter(post => post.id !== id)]);
+		setSelectedPost(null);
 	};
 
 	return (
@@ -49,11 +53,11 @@ function App() {
 			<div className="app">
 				<LeftPanel>
 					<Header />
-					<JournalAddButton />
+					<JournalAddButton onClick={() => setSelectedPost(null)} />
 					<JournalList setSelectedPost={setSelectedPost} posts={mapPosts(posts)} />
 				</LeftPanel>
 				<Body>
-					<JournalForm selectedPost={selectedPost} onSubmit={formSubmitHandler} />
+					<JournalForm selectedPost={selectedPost} onSubmit={formSubmitHandler} onDelete={postDeleteHandler} />
 				</Body>
 			</div>
 		</UserContextProvider>

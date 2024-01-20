@@ -9,3 +9,9 @@
   line-height: normal;
   cursor: pointer;
 }
+
+@media screen and (max-width: 768px) {
+  .select-user {
+    font-size: 14px;
+  }
+}

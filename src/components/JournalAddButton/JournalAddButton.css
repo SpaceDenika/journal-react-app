@@ -11,3 +11,16 @@
   font-weight: 600;
   line-height: normal;
 }
+
+@media screen and (max-width: 930px) {
+  .journal-add {
+    background-position: 8%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .journal-add {
+    background-position: 4%;
+    font-size: 14px;
+  }
+}
