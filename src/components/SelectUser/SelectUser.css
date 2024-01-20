@@ -1,0 +1,11 @@
+.select-user {
+  font-family: "Source Sans 3", sans-serif;
+  padding: 5px;
+  border: none;
+  text-align: center;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: normal;
+  line-height: normal;
+  cursor: pointer;
+}

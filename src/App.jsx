@@ -1,51 +1,48 @@
 import './App.css';
-import { useState, useEffect } from 'react';
 import JournalList from './components/JournalList/JournalList';
 import Header from './components/Header/Header';
 import JournalAddButton from './components/JournalAddButton/JournalAddButton';
 import Body from './layouts/Body/Body';
 import LeftPanel from './layouts/LeftPanel/LeftPanel';
 import JournalForm from './components/JournalForm/JournalForm';
+import useLocalStorage from './hooks/UseLocalStorage.hook';
+import { UserContextProvider } from './context/user.context';
+
+function mapPosts(posts) {
+	if (!posts) {
+		return [];
+	}
+
+	return posts.map(post => ({
+		...post,
+		date: new Date(post.date)
+	}));
+}
 
 function App() {
-	const [posts, setPosts] = useState([]);
+	const [posts, savePosts] = useLocalStorage('data');
 
 	const formSubmitHandler = (formData) => {
-		setPosts([...posts, {
-			title: formData.title,
+		savePosts([...mapPosts(posts), {
+			...formData,
 			date: new Date(formData.date),
-			content: formData.content,
-			id: posts.length > 0 ? Math.max(...posts.map(item => item.id)) + 1 : 1
+			id: posts.length > 0 ? Math.max(...posts.map(post => post.id)) + 1 : 1
 		}]);
 	};
 
-	useEffect(() => {
-		const data = JSON.parse(localStorage.getItem('data'));
-		if (data) {
-			setPosts(data.map(item => ({
-				...item,
-				date: new Date(item.date)
-			})));
-		}
-	}, []);
-
-	useEffect(() => {
-		if (posts.length) {
-			localStorage.setItem('data', JSON.stringify(posts));
-		}
-	}, [posts]);
-
 	return (
-		<div className="app">
-			<LeftPanel>
-				<Header />
-				<JournalAddButton />
-				<JournalList posts={posts} />
-			</LeftPanel>
-			<Body>
-				<JournalForm onSubmit={formSubmitHandler} />
-			</Body>
-		</div>
+		<UserContextProvider>
+			<div className="app">
+				<LeftPanel>
+					<Header />
+					<JournalAddButton />
+					<JournalList posts={mapPosts(posts)} />
+				</LeftPanel>
+				<Body>
+					<JournalForm onSubmit={formSubmitHandler} />
+				</Body>
+			</div>
+		</UserContextProvider>
 	);
 }
 

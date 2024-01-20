@@ -1,13 +1,23 @@
 import './JournalForm.css';
-import { useEffect, useReducer } from 'react';
+import { useContext, useEffect, useReducer } from 'react';
 import Button from '../Button/Button';
 import date from '../../assets/date.svg';
 import tag from '../../assets/tag.svg';
 import { INITIAL_DATA, formReducer } from './JournalForm.state';
+import { UserContext } from '../../context/user.context';
 
 function JournalForm({ onSubmit }) {
 	const [formState, dispatchForm] = useReducer(formReducer, INITIAL_DATA);
 	const { values, isValid } = formState;
+	const { userId } = useContext(UserContext);
+
+	useEffect(() => {
+		dispatchForm({ type: 'SET_VALUE', payload: { userId } });
+	}, [userId]);
+
+	useEffect(() => {
+		dispatchForm({ type: 'CHECK_VALID' });
+	}, [values]);
 
 	const addJournalItem = (e) => {
 		e.preventDefault();
@@ -19,10 +29,6 @@ function JournalForm({ onSubmit }) {
 		dispatchForm({ type: 'SET_VALUE', payload: { [e.target.name]: e.target.value } } );
 	};
   
-	useEffect(() => {
-		dispatchForm({ type: 'CHECK_VALID' });
-	}, [values]);
-
 	return (
 		<form className="journal-form" onSubmit={addJournalItem}>
 			<input minLength={3} className="journal-form__input journal-form__input_title" type="text" name="title" placeholder='Заголовок...' value={values.title} onChange={changeInputHandler} />
@@ -37,7 +43,7 @@ function JournalForm({ onSubmit }) {
 				<input id='tag' className="journal-form__input journal-form__input_tag" type="text" name="tag" value={values.tag} onChange={changeInputHandler} />
 			</label>
 			<textarea minLength={5} className="journal-form__input journal-form__input_content" name="content" id="" cols="30" rows="10" placeholder='Текст...' value={values.content} onChange={changeInputHandler}></textarea>
-			<Button disabled={!isValid} text="Сохранить" />
+			<Button disabled={!isValid}>Сохранить</Button>
 		</form>
 	);
 }
