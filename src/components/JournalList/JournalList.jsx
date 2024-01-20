@@ -4,7 +4,7 @@ import JournalItem from '../JournalItem/JournalItem';
 import { useContext } from 'react';
 import { UserContext } from '../../context/user.context';
 
-function JournalList({ posts }) {
+function JournalList({ setSelectedPost, posts }) {
 	const { userId } = useContext(UserContext);
 
 	const sortPosts = (a, b) => {
@@ -19,7 +19,7 @@ function JournalList({ posts }) {
 		<ul className="journal-list">
 			{posts.length === 0 && <p>Записи отсутствуют, добавьте первую</p>}
 			{posts.length > 0 && posts.filter(post => post.userId === userId).sort(sortPosts).map(el => (
-				<li key={el.id}>
+				<li key={el.id} onClick={() => setSelectedPost(el)}>
 					<CardButton>
 						<JournalItem data={el} />
 					</CardButton>

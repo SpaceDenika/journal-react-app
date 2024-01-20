@@ -7,6 +7,7 @@ import LeftPanel from './layouts/LeftPanel/LeftPanel';
 import JournalForm from './components/JournalForm/JournalForm';
 import useLocalStorage from './hooks/UseLocalStorage.hook';
 import { UserContextProvider } from './context/user.context';
+import { useState } from 'react';
 
 function mapPosts(posts) {
 	if (!posts) {
@@ -21,13 +22,26 @@ function mapPosts(posts) {
 
 function App() {
 	const [posts, savePosts] = useLocalStorage('data');
+	const [selectedPost, setSelectedPost] = useState({});
 
 	const formSubmitHandler = (formData) => {
-		savePosts([...mapPosts(posts), {
-			...formData,
-			date: new Date(formData.date),
-			id: posts.length > 0 ? Math.max(...posts.map(post => post.id)) + 1 : 1
-		}]);
+		if (!formData.id) {
+			savePosts([...posts, {
+				...formData,
+				date: new Date(formData.date),
+				id: posts.length > 0 ? Math.max(...posts.map(post => post.id)) + 1 : 1
+			}]);
+		} else {
+			savePosts([...mapPosts(posts).map(post => {
+				if (post.id === formData.id) {
+					return {
+						...formData
+					};
+				}
+				return post;
+			})]);
+		}
+
 	};
 
 	return (
@@ -36,10 +50,10 @@ function App() {
 				<LeftPanel>
 					<Header />
 					<JournalAddButton />
-					<JournalList posts={mapPosts(posts)} />
+					<JournalList setSelectedPost={setSelectedPost} posts={mapPosts(posts)} />
 				</LeftPanel>
 				<Body>
-					<JournalForm onSubmit={formSubmitHandler} />
+					<JournalForm selectedPost={selectedPost} onSubmit={formSubmitHandler} />
 				</Body>
 			</div>
 		</UserContextProvider>

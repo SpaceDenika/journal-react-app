@@ -6,10 +6,14 @@ import tag from '../../assets/tag.svg';
 import { INITIAL_DATA, formReducer } from './JournalForm.state';
 import { UserContext } from '../../context/user.context';
 
-function JournalForm({ onSubmit }) {
+function JournalForm({ selectedPost, onSubmit }) {
 	const [formState, dispatchForm] = useReducer(formReducer, INITIAL_DATA);
 	const { values, isValid } = formState;
 	const { userId } = useContext(UserContext);
+
+	useEffect(() => {
+		dispatchForm({ type: 'SET_VALUE', payload: selectedPost });
+	}, [selectedPost]);
 
 	useEffect(() => {
 		dispatchForm({ type: 'SET_VALUE', payload: { userId } });
@@ -23,6 +27,7 @@ function JournalForm({ onSubmit }) {
 		e.preventDefault();
 		onSubmit(values);
 		dispatchForm({ type: 'CLEAR' });
+		dispatchForm({ type: 'SET_VALUE', payload: { userId } });
 	};
 
 	const changeInputHandler = (e) => {
@@ -35,7 +40,7 @@ function JournalForm({ onSubmit }) {
 			<label className="journal-form__label" htmlFor="date">
 				<img src={date} alt="Иконка календаря" />
 				<span className="journal-form__span">Дата</span>
-				<input id='date' className="journal-form__input journal-form__input_date" type="date" name="date" value={values.date} onChange={changeInputHandler} />
+				<input id='date' className="journal-form__input journal-form__input_date" type="date" name="date" value={values.date ? new Date(values.date).toISOString().slice(0, 10) : ''} onChange={changeInputHandler} />
 			</label>
 			<label className="journal-form__label" htmlFor="tag">
 				<img src={tag} alt="Иконка папки" />
